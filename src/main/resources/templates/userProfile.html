@@ -1,0 +1,87 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorator="layouts/main.html">
+<title layout:fragment="title">Profile</title>
+<div layout:fragment = "contentPart">
+
+    <div class="col-5">
+        <h5 align="center">Refresh profile data</h5>
+        <br>
+        <form th:action="@{/refresh}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}">
+            <input type="hidden" name="act" value="email">
+            <div class="form-group row mt-3" >
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="text" name="email" class="form-control" id="inputEmail3" th:placeholder="${user.email}" th:value="${user.email}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary float-right">SAVE</button>
+                </div>
+            </div>
+        </form>
+        <form th:action="@{/refresh}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}">
+            <input type="hidden" name="act" value="password">
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Old Password</label>
+                <div class="col-sm-10">
+                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-4 col-form-label">New Password</label>
+                <div class="col-sm-8">
+                    <input type="password" name="newPassword" class="form-control" placeholder="New Password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-4 col-form-label">Confirm New Password</label>
+                <div class="col-sm-8">
+                    <input type="password" name="confirmNewPassword" class="form-control" placeholder="Confirm New Password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary float-right">SAVE</button>
+                </div>
+            </div>
+        </form>
+        <form th:action="@{/refresh}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}">
+            <input type="hidden" name="act" value="name">
+            <div class="form-group row mt-3" >
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" name="name" class="form-control" th:placeholder="${user.name}" th:value="${user.name}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary float-right">SAVE</button>
+                </div>
+            </div>
+        </form>
+        <form th:action="@{/refresh}" method="post">
+            <input type="hidden" name="id" th:value="${user.id}">
+            <input type="hidden" name="act" value="surName">
+            <div class="form-group row mt-3" >
+                <label class="col-sm-2 col-form-label">Surname</label>
+                <div class="col-sm-10">
+                    <input type="text" name="surName" class="form-control" th:placeholder="${user.surname}" th:value="${user.surname}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary float-right">SAVE</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+</html>

@@ -1,0 +1,132 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorator="layouts/main.html">
+<title layout:fragment="title">Profile</title>
+<div layout:fragment = "contentPart">
+
+    <div class="col-5">
+        <h5 align="center">ADD USER</h5>
+        <br>
+        <form th:action="@{'/addUserModerator'}" method="post">
+            <input type="hidden" name="act" value="register">
+            <div class="form-group row mt-3" >
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="text" name="email" class="form-control" id="inputEmail3" placeholder="Email">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-4 col-form-label">Re-Password</label>
+                <div class="col-sm-8">
+                    <input type="password" name="re-password" class="form-control" placeholder="Re-Password">
+                </div>
+            </div>
+            <div class="form-group row mt-3" >
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" name="name" class="form-control" placeholder="Name">
+                </div>
+            </div>
+            <div class="form-group row mt-3" >
+                <label class="col-sm-2 col-form-label">Surname</label>
+                <div class="col-sm-10">
+                    <input type="text" name="surName" class="form-control" placeholder="Surname">
+                </div>
+            </div>
+            <!--<div class="form-check row">-->
+                <!--<input class="form-check-input" type="checkbox" name="USER" value="1" id="defaultCheck1">-->
+                <!--<label class="form-check-label" for="defaultCheck1">-->
+                    <!--USER-->
+                <!--</label>-->
+            <!--</div>-->
+            <!--<div class="form-check row">-->
+                <!--<input class="form-check-input" type="checkbox" name="MODERATOR" value="1">-->
+                <!--<label class="form-check-label" for="defaultCheck1">-->
+                    <!--MODERATOR-->
+                <!--</label>-->
+            <!--</div>-->
+            <div class="form-group row">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary float-right">ADD USER</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+    <br>
+    <h5 align="center">LIST OF USERS</h5>
+    <br>
+    <div class="container">
+        <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Email</th>
+            <th scope="col">Name</th>
+            <th scope="col">Surname</th>
+            <th scope="col">Blocking</th>
+            <th scope="col">Refresh password</th>
+            <th scope="col">Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${allUsers}">
+            <th scope="row" th:text="${u.id}"></th>
+            <th th:text="${u.email}"></th>
+            <td th:text="${u.name}"></td>
+            <td th:text="${u.surname}"></td>
+            <td>
+                <form th:action="${'/blockUser'}" th:if="${u.isActive and not u.roles.contains(admin)}" method="post">
+                    <input type="hidden" name="id" th:value="${u.id}">
+                    <button type="submit" class="btn btn-outline-danger">Block</button>
+                </form>
+                <form th:action="${'/unBlockUser'}" th:unless="${u.isActive}" method="post">
+                    <input type="hidden" name="id" th:value="${u.id}">
+                    <button type="submit" class="btn btn-outline-success">UnBlock</button>
+                </form>
+            </td>
+            <td>
+                <!--<button th:if="${u.roles.contains(moderator)}" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalCenter2">-->
+                    <!--Refresh-->
+                <!--</button>-->
+
+                <!--<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+                    <!--<div class="modal-dialog" role="document">-->
+                        <!--<div class="modal-content">-->
+                            <!--<div class="modal-header">-->
+                                <!--<h5 class="modal-title" id="exampleModalLabel">Refresh password</h5>-->
+                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+                                    <!--<span aria-hidden="true">&times;</span>-->
+                                <!--</button>-->
+                            <!--</div>-->
+                            <!--<form th:action="${'/refPassword'}" method="post">-->
+                            <!--<div class="modal-body">-->
+                                    <!--<div class="form-group">-->
+                                        <!--<input type="hidden" name="id" th:value="${u.id}">-->
+                                        <!--<label for="recipient-name" class="col-form-label">New password:</label>-->
+                                        <!--<input type="text" name="password" class="form-control" id="recipient-name">-->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="modal-footer">-->
+                                <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                                <!--<button type="submit" class="btn btn-primary">Refresh</button>-->
+                            <!--</div>-->
+                            <!--</form>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </td>
+            <td th:text="${u.roles}"></td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</html>
