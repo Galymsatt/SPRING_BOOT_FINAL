@@ -5,8 +5,15 @@ import com.project.demo.entities.Users;
 import com.project.demo.repositories.RoleRepository;
 import com.project.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +22,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+
+import java.security.Principal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -37,7 +45,8 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Users user = userRepository.findByEmail(s);
+//        Users user = userRepository.findByEmail(s);
+        Users user = userRepository.findByEmailAndIsActiveIsTrue(s);
         User securityUser = new User(user.getEmail(), user.getPassword(), user.getRoles());
         return securityUser;
     }
@@ -54,7 +63,10 @@ public class UserService implements UserDetailsService {
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             User secUser = (User)authentication.getPrincipal();
             user = userRepository.findByEmail(secUser.getUsername());
+//            user = userRepository.findByEmailAndIsActiveIsTrue(secUser.getUsername());
         }
+
+
 
         return user;
     }
@@ -89,6 +101,7 @@ public class UserService implements UserDetailsService {
         return redirect;
     }
 
+
     public String refreshEmail(Long id, String email){
 
         String redirect ="email_refresh_error";
@@ -99,6 +112,35 @@ public class UserService implements UserDetailsService {
             if (emailUser == null) {
                 user.setEmail(email);
                 userRepository.save(user);
+
+//                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//                System.out.println(authentication.getPrincipal().toString());
+                SecurityContextHolder.clearContext();
+//                Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), user.getRoles());
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+                //SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+
+//                List<Role> autorities = getAuthorities(user.getRoles());
+///////////////////////////////////////////////////zdes rabotalo//////////////////////////////////////////////////////////////////////////
+//                User secUser = new User(user.getName(), user.getPassword(), getAuthorities(user.getRoles()));
+//                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
+//                        secUser, null, user.getRoles());
+//                SecurityContextHolder.getContext().setAuthentication(authRequest);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//                List<GrantedAuthority> authorities = user.getRoles().stream()//Pahet no ne ponial
+//                        .map(p -> new SimpleGrantedAuthority(p.getRole()))
+//                        .collect(Collectors.toList());
+
+                UserDetails secUser = loadUserByUsername(user.getEmail());//vmesto UserDetails ya pisal user s bibliotecki UserDetails. Vot takaya tupaya owibka
+                Authentication authentication = new UsernamePasswordAuthenticationToken(secUser, null, user.getRoles());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // Authenticate the user
+//                Authentication authentication = authenticationManager.authenticate(authRequest);
+//                SecurityContext securityContext = SecurityContextHolder.getContext();
+//                securityContext.setAuthentication(authentication);
+
                 redirect = "email_refreshed";
             }
             else {
@@ -108,6 +150,8 @@ public class UserService implements UserDetailsService {
 
         return redirect;
     }
+
+
 
     public String refreshName(Long id, String name){
 
@@ -142,8 +186,13 @@ public class UserService implements UserDetailsService {
         String redirect = "password_refresh_error";
         Users user = getUserById(id);
         System.out.println("refreshPassword: \n Old:"+user.getPassword()+"\n Password: "+passwordEncoder.encode(oldPass));
+
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        boolean isPasswordMatches=bcrypt.matches(oldPass, user.getPassword());//Sopostovlieam poroli
+
         if(user!=null){
-            if(true) {//user.getPassword().equals(passwordEncoder.encode(oldPass))
+//            if(true) {//user.getPassword().equals(passwordEncoder.encode(oldPass))//ne pashet
+            if(isPasswordMatches) {//Vot pashet
                 if(newPass.equals(confirmNewPass)) {
                     user.setPassword(newPass);
                     registerUser(user);
@@ -158,6 +207,22 @@ public class UserService implements UserDetailsService {
                 redirect = "error_invalid_old_password";
             }
         }
+
+        return redirect;
+    }
+
+    public String refreshPassword(Long id, String newPass){
+
+        String redirect = "password_refresh_error";
+        Users user = getUserById(id);
+
+        if(user!=null){
+            user.setPassword(newPass);
+            registerUser(user);
+//            userRepository.save(user);
+            redirect = "password_refreshed";
+        }
+
 
         return redirect;
     }
@@ -203,4 +268,9 @@ public class UserService implements UserDetailsService {
         return redirect;
     }
 
+    public List<Users> getAllUsers(){
+        List<Users> allUsers = userRepository.findAll();
+
+        return allUsers;
+    }
 }

@@ -23,9 +23,6 @@ import java.util.*;
 public class MainController {
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     RoleRepository roleRepository;
 
     @Autowired
@@ -55,7 +52,7 @@ public class MainController {
 //    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String profile(ModelMap model){
 
-        List<Users> allUsers = userRepository.findAll();
+        List<Users> allUsers = userService.getAllUsers();
         model.addAttribute("allUsers", allUsers);
 
         Role moderator = roleRepository.getOne(3L);
@@ -64,12 +61,14 @@ public class MainController {
         Role admin = roleRepository.getOne(2L);
         model.addAttribute("admin", admin);
 
+        Role user = roleRepository.getOne(1L);
+        model.addAttribute("user", user);
+
         return "adminProfile";
     }
 
     @GetMapping(value = "/userProfile")//not finished
     @PreAuthorize("hasRole('ROLE_USER')")
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public String userProfile(ModelMap model){
 
         Users user = userService.getAuthonticatedUser();
@@ -113,14 +112,7 @@ public class MainController {
     public String refPassword(@RequestParam(name = "id") Long id,
                               @RequestParam(name = "password") String password){
 
-        String redirect = "redirect:/profile?password_not_refreshed";
-
-        Optional<Users> user = userRepository.findById(id);
-        if(user.isPresent()){
-            user.get().setPassword(password);
-            userService.registerUser(user.get());
-            redirect = "redirect:/profile?password_refreshed";
-        }
+        String redirect = "redirect:/adminProfile?"+userService.refreshPassword(id, password);
 
         return redirect;
     }
@@ -129,19 +121,13 @@ public class MainController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String blockUser(@RequestParam(name = "id") Long id){
 
-        String redirect = userService.blockUser(id);
+        String redirect = "redirect:/adminProfile?"+userService.blockUser(id);
 
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(authentication instanceof AnonymousAuthenticationToken)){
-            User secUser = (User)authentication.getPrincipal();
-            Users requester = userRepository.findByEmail(secUser.getUsername());
-            if(requester.getRoles().contains(roleRepository.getOne(3L)))
-                return "redirect:/profile_moderator";
-        }
 
 
-        return "redirect:/profile";
+
+        return redirect;
     }
 
 

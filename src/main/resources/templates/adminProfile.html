@@ -93,35 +93,35 @@
                 </form>
             </td>
             <td>
-                <!--<button th:if="${u.roles.contains(moderator)}" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalCenter2">-->
-                    <!--Refresh-->
-                <!--</button>-->
+                <button th:if="${u.roles.contains(user)}" type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModalCenter2">
+                    Refresh
+                </button>
 
-                <!--<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-                    <!--<div class="modal-dialog" role="document">-->
-                        <!--<div class="modal-content">-->
-                            <!--<div class="modal-header">-->
-                                <!--<h5 class="modal-title" id="exampleModalLabel">Refresh password</h5>-->
-                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-                                    <!--<span aria-hidden="true">&times;</span>-->
-                                <!--</button>-->
-                            <!--</div>-->
-                            <!--<form th:action="${'/refPassword'}" method="post">-->
-                            <!--<div class="modal-body">-->
-                                    <!--<div class="form-group">-->
-                                        <!--<input type="hidden" name="id" th:value="${u.id}">-->
-                                        <!--<label for="recipient-name" class="col-form-label">New password:</label>-->
-                                        <!--<input type="text" name="password" class="form-control" id="recipient-name">-->
-                                    <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="modal-footer">-->
-                                <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-                                <!--<button type="submit" class="btn btn-primary">Refresh</button>-->
-                            <!--</div>-->
-                            <!--</form>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
+                <div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Refresh password</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form th:action="${'/refPassword'}" method="post">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="hidden" name="id" th:value="${u.id}">
+                                        <label for="recipient-name" class="col-form-label">New password:</label>
+                                        <input type="text" name="password" class="form-control" id="recipient-name">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Refresh</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </td>
             <td th:text="${u.roles}"></td>
         </tr>

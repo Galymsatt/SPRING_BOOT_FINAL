@@ -2,6 +2,7 @@ package com.project.demo.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -20,6 +21,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "id")
     private Long id;
 
+    @Getter
     @Column(name = "role")
     private String role;
 
