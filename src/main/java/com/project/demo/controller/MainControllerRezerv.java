@@ -8,7 +8,7 @@ import com.project.demo.repositories.CommentRepository;
 import com.project.demo.repositories.NewsPostRepository;
 import com.project.demo.repositories.RoleRepository;
 import com.project.demo.repositories.UserRepository;
-import com.project.demo.services.UserService.UserService;
+import com.project.demo.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -33,7 +33,7 @@ public class MainControllerRezerv {
     RoleRepository roleRepository;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Autowired
     NewsPostRepository newsPostRepository;

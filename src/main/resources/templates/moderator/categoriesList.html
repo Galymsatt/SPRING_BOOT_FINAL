@@ -1,0 +1,63 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorator="moderator/profile.html">
+
+<title layout:fragment="title">Moderator profile/Categories</title>
+
+<div layout:fragment = "mainPart" >
+
+	<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Categories</strong>
+			<a th:href="@{/category/pageAddCategory}" class="btn btn-outline-primary float-md-right"> add category </a>
+		</header>
+		<!-- card-body .// -->
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<td>
+						<p class="title mb-0">Category name</p>
+						<var class="price text-muted">ID</var>
+					</td>
+					<td> Created at </td>
+					<td> Updated at </td>
+					<td> Deleted at </td>
+					<td> Delete </td>
+					<td> Edit </td>
+				</tr>
+				</thead>
+				<tbody>
+				<th:block th:each="c : ${categories}">
+				<tr>
+					<td>
+						<p class="title mb-0" th:text="${c.getName()}">Category name</p>
+						<var class="price text-muted" th:text="${c.getId()}">ID</var>
+					</td>
+					<td th:text="${c.getCreatedAt()!=null} ? ${#dates.format(c.getCreatedAt(), 'dd-MM-yyyy HH:mm')} : '-'"> Created at </td>
+					<td th:text="${c.getUpdatedAt()!=null} ? ${#dates.format(c.getUpdatedAt(), 'dd-MM-yyyy HH:mm')} : '-'"> Updated at </td>
+					<td th:text="${c.getDeletedAt()!=null} ? ${#dates.format(c.getDeletedAt(), 'dd-MM-yyyy HH:mm')} : '-'"> Deleted at </td>
+					<td th:if="${c.getDeletedAt()==null}">
+						<form th:action="@{/category/deleteCategory}" method="post">
+							<input type="hidden" name="id" th:value="${c.getId()}">
+							<button type="submit" class="btn btn-sm btn-outline-light">Delete</button>
+						</form>
+					</td>
+					<td th:unless="${c.getDeletedAt()==null}">
+						<form th:action="@{/category/restoreCategory}" method="post">
+							<input type="hidden" name="id" th:value="${c.getId()}">
+							<button type="submit" class="btn btn-sm btn-outline-dark">Restore</button>
+						</form>
+					</td>
+					<td> <a th:href="@{'/category/pageCategoryEdit/'+${c.getId()}}" class="btn btn-sm btn-outline-primary">Edit</a> </td>
+				</tr>
+				</th:block>
+				</tbody>
+			</table>
+		</div> <!-- table-responsive .end// -->
+	</article>
+
+</div>
+
+</html>

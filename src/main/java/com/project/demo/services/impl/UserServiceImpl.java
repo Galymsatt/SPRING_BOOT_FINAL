@@ -1,9 +1,10 @@
-package com.project.demo.services.UserService;
+package com.project.demo.services.impl;
 
 import com.project.demo.entities.Role;
 import com.project.demo.entities.Users;
 import com.project.demo.repositories.RoleRepository;
 import com.project.demo.repositories.UserRepository;
+import com.project.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -28,7 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;

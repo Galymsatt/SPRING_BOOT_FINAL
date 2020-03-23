@@ -3,14 +3,12 @@ package com.project.demo.controller;
 import com.project.demo.entities.Role;
 import com.project.demo.entities.Users;
 import com.project.demo.repositories.RoleRepository;
-import com.project.demo.repositories.UserRepository;
-import com.project.demo.services.UserService.UserService;
+import com.project.demo.services.ProductService;
+import com.project.demo.services.UserService;
+import com.project.demo.services.impl.ProductServiceImpl;
+import com.project.demo.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +17,7 @@ import java.util.*;
 
 
 @Controller
-//@RequestMapping(path = "/main")
+@RequestMapping(value = "/")
 public class MainController {
 
     @Autowired
@@ -28,10 +26,28 @@ public class MainController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/auth_reg")
+    @GetMapping(value = "/")
+    public String index(ModelMap model){
+
+
+        return "main/main";
+//        return "index";
+    }
+
+    @GetMapping(value = "/auth_reg")//Ne nuzhno
     public String auth_reg(){
-        return "auth_reg";
-//        return "register";
+//        return "auth_reg";
+        return "register";
+    }
+
+    @GetMapping(value = "/pageRegister")
+    public String register(){
+        return "anonymous/register";
+    }
+
+    @GetMapping(value = "/pageLogin")
+    public String login(){
+        return "anonymous/login";
     }
 
 
@@ -42,7 +58,7 @@ public class MainController {
                            @RequestParam(name = "name") String name,
                            @RequestParam(name = "surName") String surName){
 
-        String redirect = "redirect:/auth_reg?" + userService.register(email, password, re_password, name, surName);
+        String redirect = "redirect:/pageRegister?" + userService.register(email, password, re_password, name, surName);
 
         return redirect;
     }
@@ -64,7 +80,15 @@ public class MainController {
         Role user = roleRepository.getOne(1L);
         model.addAttribute("user", user);
 
-        return "adminProfile";
+        return "admin/profile";
+    }
+
+    @GetMapping(value = "/moderatorProfile")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    public String profile_moderator(ModelMap model){
+
+
+        return "moderator/profile";
     }
 
     @GetMapping(value = "/userProfile")//not finished
@@ -74,7 +98,7 @@ public class MainController {
         Users user = userService.getAuthonticatedUser();
         model.addAttribute("user", user);
 
-        return "userProfile";
+        return "user/profile";
     }
 
     @PostMapping(value = "/refresh")
@@ -135,12 +159,5 @@ public class MainController {
 
     ///////////////////////////////END USER//////////////////////////////////////////
 
-    //////////////////////NEWS POST///////////////////////////////////////////////////////
-
-    @GetMapping(value = "/")
-    public String index(ModelMap model){
-
-        return "index";
-    }
 
 }

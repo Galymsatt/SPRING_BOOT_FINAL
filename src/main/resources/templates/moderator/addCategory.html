@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorator="moderator/profile.html">
+
+<title layout:fragment="title">Moderator profile/Add category</title>
+
+<div layout:fragment = "mainPart" >
+
+	<form th:action="@{addCategory}" method="post">
+
+		<h5 class="col">Add category</h5>
+
+		<div class="form-group col-md-4">
+			<label>Name</label>
+			<input type="text" name="name" placeholder="category name" class="form-control">
+		</div>
+
+		<button type="submit" class="btn btn-primary float-md-right">Save</button>
+
+	</form>
+
+</div>
+
+</html>

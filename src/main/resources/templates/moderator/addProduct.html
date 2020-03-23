@@ -1,0 +1,56 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorator="moderator/profile.html">
+
+<title layout:fragment="title">Moderator profile/Add product</title>
+
+<div layout:fragment = "mainPart" >
+
+	<form th:action="@{addProduct}" method="post" enctype="multipart/form-data">
+
+		<h5 class="col">Add product</h5>
+
+		<div class="form-group col-md-4">
+			<label>Name</label>
+			<input type="text" name="name" placeholder="product name" class="form-control">
+		</div>
+
+		<div class="form-group col-md-4">
+			<label>Category</label>
+			<select class="form-control" name="categoryId">
+				<option th:each="c : ${categoryList}"
+						th:value="${c.getId()}"
+						th:utext="${c.getName()}"></option>
+			</select>
+		</div>
+
+		<div class="col form-group">
+			<label>Content</label>
+			<article class="card mb-3">
+				<div>
+					<textarea name="content" id="editor1"></textarea>
+					<script>
+						CKEDITOR.replace( 'editor1' );
+					</script>
+				</div>
+			</article> <!-- card.// -->
+		</div>
+
+		<div class="form-group col-md-4">
+			<label>Price</label>
+			<input type="number" name="price" step=0.01 placeholder="Type here" class="form-control">
+		</div>
+
+		<div class="form-group col-md-4">
+			<label>Image</label>
+			<input type="file" name="image" class="form-control-file">
+		</div>
+
+		<button type="submit" class="btn btn-primary float-md-right">Save</button>
+
+	</form>
+
+</div>
+
+</html>

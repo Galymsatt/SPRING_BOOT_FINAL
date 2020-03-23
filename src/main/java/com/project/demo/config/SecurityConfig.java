@@ -1,6 +1,6 @@
 package com.project.demo.config;
 
-import com.project.demo.services.UserService.UserService;
+import com.project.demo.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -33,22 +33,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**").permitAll()
+                .antMatchers("/css/**", "/js/**", "/product/**").permitAll()
                 .antMatchers("/").permitAll();
 
         http
                 .formLogin()
                 .loginProcessingUrl("/signin").permitAll()
-                .loginPage("/auth_reg").permitAll()
+                .loginPage("/pageLogin").permitAll()
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/")
-                .failureUrl("/auth_reg?authorization_error");
+                .failureUrl("/pageLogin?authorization_error");
 
         http
                 .logout().permitAll()
                 .logoutUrl("/exit").permitAll()
-                .logoutSuccessUrl("/auth_reg");
+                .logoutSuccessUrl("/");
         http.csrf().disable();
     }
 }

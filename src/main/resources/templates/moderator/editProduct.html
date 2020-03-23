@@ -1,0 +1,98 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorator="moderator/profile.html">
+
+<title layout:fragment="title">Moderator profile/Edit product</title>
+
+<div layout:fragment = "mainPart" >
+
+	<h5 class="col">Edit product <var class="price text-muted" th:text="${'ID: '+ product.getId()}">ID</var></h5>
+
+	<form th:action="@{/product/editProductName}" method="post">
+		<input type="hidden" name="id" th:value="${product.getId()}">
+		<div class="form-group col-md-6">
+			<label>Name</label>
+			<div class="row">
+				<div class="col-md-8">
+					<input type="text" name="name" th:value="${product.getName()}" th:placeholder="${product.getName()}" class="form-control">
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-outline-primary">Save</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<form th:action="@{/product/editProductCategory}" method="post">
+		<input type="hidden" name="id" th:value="${product.getId()}">
+		<div class="form-group col-md-6">
+			<label>Category</label>
+			<div class="row">
+				<div class="col-md-8">
+					<select class="form-control" name="categoryId">
+						<option th:each="c : ${categoryList}"
+								th:value="${c.getId()}"
+								th:text="${c.getId()==product.getCategory().getId()} ? ${'— '+c.getName()+' —'} : ${c.getName()}"
+								th:selected="${c.getId()==product.getCategory().getId()}"></option>
+					</select>
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-outline-primary">Save</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<form th:action="@{/product/editProductContent}" method="post">
+		<input type="hidden" name="id" th:value="${product.getId()}">
+		<div class="form-group col">
+			<label>Content</label>
+			<article class="card mb-3">
+				<div>
+					<textarea name="content" th:text="${product.getContent()}" id="editor1"></textarea>
+					<script>
+						CKEDITOR.replace( 'editor1' );
+					</script>
+				</div>
+			</article> <!-- card.// -->
+			<button type="submit" class="btn btn-outline-primary float-md-right">Save</button>
+		</div>
+	</form>
+
+	<form th:action="@{/product/editProductPrice}" method="post">
+		<input type="hidden" name="id" th:value="${product.getId()}">
+		<div class="form-group col-md-6">
+			<label>Price</label>
+			<div class="row">
+				<div class="col-md-8">
+					<input type="number" name="price" th:value="${product.getPrice()}" placeholder="price" class="form-control" step=0.01 min="0">
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-outline-primary">Save</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
+	<form th:action="@{/product/editProductImage}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="id" th:value="${product.getId()}">
+		<div class="form-group col-md-6">
+			<label>Image</label>
+			<div class="row">
+				<div class="col-md-8">
+					<input type="file" name="image" class="form-control-file">
+				</div>
+				<div class="col-md-4">
+					<button type="submit" class="btn btn-outline-primary">Save</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
+
+</div>
+
+</html>

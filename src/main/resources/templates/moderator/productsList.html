@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorator="moderator/profile.html">
+
+<title layout:fragment="title" th:text="Moderator profile/Products">Moderator profile/Products</title>
+
+<div layout:fragment = "mainPart" >
+
+	<article class="card">
+		<header class="card-header">
+			<strong class="d-inline-block mr-3">Products</strong>
+			<a th:href="@{/product/pageAddProduct}" class="btn btn-outline-primary float-md-right"> add product </a>
+		</header>
+		<!-- card-body .// -->
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+				<tr class="text-center">
+					<td width="65">Image</td>
+					<td class="text-left">
+						<p class="title mb-0">Product name</p>
+						<var class="price text-muted">ID</var>
+					</td>
+					<td> Category </td>
+					<td> Created at </td>
+					<td> Updated at </td>
+					<td> Deleted at </td>
+					<td> Price </td>
+					<td> Details </td>
+					<td> Delete </td>
+					<td> Edit </td>
+				</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="p : ${products}">
+					<tr class="text-center">
+						<td width="65">
+							<img th:src="@{'/'+${p.getImagePath()}}" class="img-xs border"> <!-- always put / before the url -->
+						</td>
+						<td class="text-left">
+							<p class="title mb-0" th:text="${p.getName()}">Product name</p>
+							<var class="price text-muted" th:text="${p.getId()}">ID</var>
+						</td>
+						<td th:text="${p.getCategory().getName()}"> Category </td>
+						<td th:text="${p.getCreatedAt()!=null} ? ${#dates.format(p.getCreatedAt(), 'dd-MM-yyyy HH:mm')} : '-'"> Created at </td>
+						<!--th:text="${#dates.format(p.getCreatedAt(), 'dd-MM-yyyy HH:mm')}"-->
+						<td th:text="${p.getUpdatedAt()!=null} ? ${#dates.format(p.getUpdatedAt(), 'dd-MM-yyyy HH:mm')} : '-'"> Updated at </td>
+						<!--<td th:text="${p.getUpdatedAt()}"> Updated at </td>-->
+						<td th:text="${p.getDeletedAt()!=null} ? ${#dates.format(p.getDeletedAt(), 'dd-MM-yyyy HH:mm')} : '-'"> Deleted at </td>
+						<!--<td th:text="${p.getUpdatedAt()}"> Deleted at </td>-->
+						<td th:text="${p.getPrice()}"> Price </td>
+						<td> <a href="#" class="btn btn-sm btn-light"> Details </a> </td>
+						<td th:if="${p.getDeletedAt()==null}">
+							<form th:action="@{/product/deleteProduct}" method="post">
+								<input type="hidden" name="id" th:value="${p.getId()}">
+								<button type="submit" class="btn btn-sm btn-outline-light btn-round">Delete</button>
+							</form>
+						</td>
+						<td th:unless="${p.getDeletedAt()==null}">
+							<form th:action="@{/product/restoreProduct}" method="post">
+								<input type="hidden" name="id" th:value="${p.getId()}">
+								<button type="submit" class="btn btn-sm btn-outline-dark">Restore</button>
+							</form>
+						</td>
+						<td> <a th:href="@{'/product/pageProductEdit/'+${p.getId()}}" class="btn btn-sm btn-outline-primary">Edit</a> </td>
+					</tr>
+					</th:block>
+				</tbody></table>
+		</div> <!-- table-responsive .end// -->
+	</article>
+
+</div>
+
+</html>
