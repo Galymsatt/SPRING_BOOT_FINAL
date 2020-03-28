@@ -1,6 +1,8 @@
 package com.project.demo.services;
 
 import com.project.demo.entities.Users;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -18,5 +20,6 @@ public interface UserService extends UserDetailsService {
     public String register(String email, String password, String re_password, String name, String surName);
     public String blockUser(Long id);
     public List<Users> getAllUsers();
+
 
     }

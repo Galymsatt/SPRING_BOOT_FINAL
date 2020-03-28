@@ -70,6 +70,28 @@
 		</div> <!-- table-responsive .end// -->
 	</article>
 
+	<nav class="mt-4" aria-label="Page navigation sample">
+		<ul class="pagination">
+			<th:block>
+				<li th:if="${products.getNumber()+1>1}" class="page-item"><a class="page-link" th:href="@{/product/pageProductsList(p=${products.getNumber()})}">Previous</a></li>
+				<li th:unless="${products.getNumber()+1>1}" class="page-item disabled"><a class="page-link" th:href="@{/product/pageProductsList(p=${products.getNumber()})}">Previous</a></li>
+			</th:block>
+			<th:block th:each="number: ${#numbers.sequence(1, products.getTotalPages())}">
+				<li th:if="${number==products.getNumber()+1}" class="page-item active">
+					<a class="page-link" th:href="@{/product/pageProductsList(p=${number})}" th:text="${number}">1</a>
+				</li>
+				<li th:unless="${number==products.getNumber()+1}" class="page-item">
+					<a class="page-link" th:href="@{/product/pageProductsList(p=${number})}" th:text="${number}">1</a>
+				</li>
+			</th:block>
+			<th:block>
+				<li th:if="${products.getNumber()+1<products.getTotalPages()}" class="page-item"><a class="page-link" th:href="@{/product/pageProductsList(p=${products.getNumber()+2})}">Next</a></li>
+				<li th:unless="${products.getNumber()+1<products.getTotalPages()}" class="page-item disabled"><a class="page-link" th:href="@{/product/pageProductsList(p=${products.getNumber()+2})}">Next</a></li>
+			</th:block>
+
+		</ul>
+	</nav>
+
 </div>
 
 </html>

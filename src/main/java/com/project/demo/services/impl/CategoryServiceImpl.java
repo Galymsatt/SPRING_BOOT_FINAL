@@ -4,6 +4,8 @@ import com.project.demo.entities.Category;
 import com.project.demo.repositories.CategoryRepository;
 import com.project.demo.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -29,6 +31,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> allCategories() {
         List<Category> categories = categoryRepository.findAll();
+        return categories;
+    }
+
+    @Override
+    public Page<Category> allCategories(Pageable pageable) {
+
+        Page<Category> categories = categoryRepository.findAll(pageable);
         return categories;
     }
 

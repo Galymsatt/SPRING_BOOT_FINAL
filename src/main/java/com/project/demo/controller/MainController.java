@@ -1,12 +1,11 @@
 package com.project.demo.controller;
 
+import com.project.demo.entities.Category;
 import com.project.demo.entities.Role;
 import com.project.demo.entities.Users;
 import com.project.demo.repositories.RoleRepository;
-import com.project.demo.services.ProductService;
+import com.project.demo.services.CategoryService;
 import com.project.demo.services.UserService;
-import com.project.demo.services.impl.ProductServiceImpl;
-import com.project.demo.services.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,19 +25,16 @@ public class MainController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/")
-    public String index(ModelMap model){
-
-
-        return "main/main";
-//        return "index";
-    }
+    @Autowired
+    CategoryService categoryService;
 
     @GetMapping(value = "/auth_reg")//Ne nuzhno
     public String auth_reg(){
 //        return "auth_reg";
         return "register";
     }
+
+    //////////////////////////////////////////USER SETTINGS/////////////////////////////////////////////////
 
     @GetMapping(value = "/pageRegister")
     public String register(){
@@ -159,5 +155,14 @@ public class MainController {
 
     ///////////////////////////////END USER//////////////////////////////////////////
 
+    /////////////////////////////////////////////////////////////////////////////////
 
+    @GetMapping(value = "/")
+    public String index(ModelMap model){
+
+        List<Category> categories = categoryService.allCategories();
+        model.addAttribute("categories", categories);
+
+        return "user/index";
+    }
 }

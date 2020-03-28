@@ -204,7 +204,7 @@ public class MainControllerRezerv {
 
         List<NewsPost> allNews = newsPostRepository.findAll();
         model.addAttribute("allNews", allNews);
-        return "index";
+        return "indexO";
     }
 
     @PostMapping(value = "/addPost")

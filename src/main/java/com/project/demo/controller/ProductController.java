@@ -6,9 +6,15 @@ import com.project.demo.entities.Product;
 import com.project.demo.services.CategoryService;
 import com.project.demo.services.ProductService;
 import com.project.demo.services.impl.ProductServiceImpl;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,9 +69,15 @@ public class ProductController {
 
     @GetMapping(value = "/pageProductsList")
 //    @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public String pageProductsList(ModelMap model){
+    public String pageProductsList(ModelMap model,
+                                   @RequestParam(name = "p", defaultValue = "1") int page){
+        page = (page<=0) ? 1 : page;
+        Pageable pageable = PageRequest.of(page-1, 10);
 
-        List<Product> products = productService.allProducts();
+//        List<Product> products = productService.allProducts();//pomenial na pageable
+        Page<Product> products = productService.allProducts(pageable);
+//        int size = products.getTotalPages();
+//        int num = products.getNumber();
         model.addAttribute("products", products);
 
         return "moderator/productsList";
@@ -158,4 +170,33 @@ public class ProductController {
 
         return redirect;
     }
+
+
+
+    @GetMapping(value = "/categoryProducts/{categoryId}")
+    public String categoryProducts(ModelMap model,
+                                   @PathVariable(name = "categoryId") Long categoryId,
+                                   @RequestParam(name = "p", defaultValue = "1") int page){
+        page = (page<=0) ? 1 : page;
+        Pageable pageable = PageRequest.of(page-1, 3);
+
+        Page<Product> products = productService.getByCategory(categoryId, pageable);
+        model.addAttribute("products", products);
+
+        Category category = categoryService.categoryById(categoryId);
+        model.addAttribute("category", category);
+
+        return "user/categoryProducts";
+    }
+
+    @GetMapping(value = "/pageProduct/{productId}")
+    public String pageProduct(ModelMap model,
+                          @PathVariable(name = "productId") Long id){
+
+        Product product = productService.productById(id);
+        model.addAttribute("product", product);
+
+        return "user/product";
+    }
+
 }

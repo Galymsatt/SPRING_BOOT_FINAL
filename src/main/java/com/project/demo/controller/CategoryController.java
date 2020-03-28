@@ -3,6 +3,9 @@ package com.project.demo.controller;
 import com.project.demo.entities.Category;
 import com.project.demo.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +40,14 @@ public class CategoryController {
 
     @GetMapping(value = "/pageCategoriesList")
 //    @PreAuthorize("hasRole('ROLE_MODERATOR')")//kak zakonchu nuzhno podkluchit
-    public String pageCategoriesList(ModelMap model){
+    public String pageCategoriesList(ModelMap model,
+                                     @RequestParam(name = "p", defaultValue = "1") int page){
 
-        List<Category> categories = categoryService.allCategories();
+        page = (page<=0) ? 1 : page;
+        Pageable pageable = PageRequest.of(page-1, 5);
+
+//        List<Category> categories = categoryService.allCategories();
+        Page<Category> categories = categoryService.allCategories(pageable);
         model.addAttribute("categories", categories);
 
         return "moderator/categoriesList";
@@ -85,4 +93,7 @@ public class CategoryController {
 
         return redirect;
     }
+
+
+
 }

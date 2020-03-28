@@ -6,6 +6,8 @@ import com.project.demo.repositories.CategoryRepository;
 import com.project.demo.repositories.ProductRepository;
 import com.project.demo.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,6 +68,14 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> allProducts() {
 
         List<Product> products = productRepository.findAll();
+        return products;
+    }
+
+    @Override
+    public Page<Product> allProducts(Pageable pageable) {
+
+        Page<Product> products = productRepository.findAll(pageable);
+
         return products;
     }
 
@@ -196,5 +206,14 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
 
         return response;
+    }
+
+
+    @Override
+    public Page<Product> getByCategory(Long id, Pageable pageable) {
+
+        Page<Product> products = productRepository.findAllByCategoryId(id, pageable);
+
+        return products;
     }
 }
