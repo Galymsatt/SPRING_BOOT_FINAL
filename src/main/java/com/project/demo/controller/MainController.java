@@ -1,6 +1,7 @@
 package com.project.demo.controller;
 
 import com.project.demo.entities.Category;
+import com.project.demo.entities.Customer;
 import com.project.demo.entities.Role;
 import com.project.demo.entities.Users;
 import com.project.demo.repositories.RoleRepository;
@@ -53,7 +54,7 @@ public class MainController {
                            @RequestParam(name = "re-password") String re_password,
                            @RequestParam(name = "name") String name,
                            @RequestParam(name = "surName") String surName){
-
+        System.out.println();
         String redirect = "redirect:/pageRegister?" + userService.register(email, password, re_password, name, surName);
 
         return redirect;

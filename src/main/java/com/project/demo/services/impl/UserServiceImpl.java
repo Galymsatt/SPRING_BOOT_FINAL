@@ -1,5 +1,6 @@
 package com.project.demo.services.impl;
 
+import com.project.demo.entities.Customer;
 import com.project.demo.entities.Role;
 import com.project.demo.entities.Users;
 import com.project.demo.repositories.RoleRepository;
@@ -67,10 +68,9 @@ public class UserServiceImpl implements UserService {
 //            user = userRepository.findByEmailAndIsActiveIsTrue(secUser.getUsername());
         }
 
-
-
         return user;
     }
+
 
     public Users getUserById(Long id){
 
@@ -242,8 +242,11 @@ public class UserServiceImpl implements UserService {
                 roles.add(userRole);
 
 
-                user = new Users(null, email, password, name, surName, true, roles);
-                registerUser(user);//osy zherge kelgen zat kaida ketedi?
+//                user = new Users(null, email, password, name, surName, true, roles);//Commented out as i add a customer
+//                registerUser(user);//osy zherge kelgen zat kaida ketedi?
+                Customer customer = new Customer(null, email, password, name, surName, true, roles);
+                customer.setPhoneNum("888888888");
+                registerUser(customer);
                 redirect = "registration_success";
             }
             else {

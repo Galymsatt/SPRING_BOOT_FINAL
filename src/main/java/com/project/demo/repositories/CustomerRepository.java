@@ -4,20 +4,17 @@ import com.project.demo.entities.Customer;
 import com.project.demo.entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface CustomerRepository extends JpaRepository<Customer , Long> {
 
-    Users findByEmail(String email);
-    Users findByEmailAndIsActiveIsTrue(String email);
-    Optional<Users> findById(Long id);
-
-//    Customer findByEmail(String email);
+//    Customer findByEmail(String email);//base implementation
+    Optional<Customer> findByEmail(String email);//i think by this i will able to get null if there is no such email, i assume
     @Query("SELECT c FROM Users c WHERE c.email=?1")
-    Customer findByEmailQuery(String email);
-
+    Object findByEmailQuery(String email);
 
 }

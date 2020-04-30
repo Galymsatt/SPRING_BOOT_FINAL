@@ -98,14 +98,25 @@
 						</dl>
 
 						<div class="form-row  mt-4">
-							<div class="form-group col-md">
-								<a href="#" class="btn  btn-primary">
-									<i class="fas fa-shopping-cart"></i> <span class="text">Add to cart</span>
-								</a>
-								<a href="#" class="btn btn-light">
-									<i class="fas fa-envelope"></i> <span class="text">Contact supplier</span>
-								</a>
+							<form th:action="@{/cart/addProduct}" method="post">
+							<div class="form-group col-md flex-grow-0">
+								<div class="input-group mb-3 input-spinner">
+									<div class="input-group-prepend">
+										<button class="btn btn-light" type="button" id="button-plus"> + </button>
+									</div>
+									<input type="text" name="quantity" class="form-control" min="1">
+									<div class="input-group-append">
+										<button class="btn btn-light" type="button" id="button-minus"> − </button>
+									</div>
+								</div>
 							</div> <!-- col.// -->
+							<div class="form-group col-md">
+								<input type="hidden" name="id" th:value="${product.getId()}">
+								<button type="submit" class="btn btn-primary">
+									<i class="fas fa-shopping-cart"></i> <span class="text">Add to cart</span>
+								</button>
+							</div> <!-- col.// -->
+							</form>
 						</div> <!-- row.// -->
 
 					</article> <!-- product-info-aside .// -->
@@ -126,16 +137,16 @@
 				<div class="col-md-8">
 					<h5 class="title-description">Description</h5>
 
-					<div name="editor2" th:text="${product.getContent()}">edwe</div>
+					<div name="editor2" th:utext="${product.getContent()}">content</div>
 
-					<textarea name="editor1" id="editor1" th:value="${product.getContent()}">Birdene</textarea>
+					<!--<textarea name="editor1" id="editor1" th:value="${product.getContent()}">Birdene</textarea>-->
 					<script>
-						console.log("Data");
-						//console.log(CKEDITOR.instances.editor1.document.getBody().getText());
-						console.log(CKEDITOR.instances.editor1.getBody().getText());
-						console.log(CKEDITOR.instances.editor1.getData());
-						console.log(CKEDITOR.instances.editor1.editable().getText());
-						console.log(CKEDITOR.instances.editor2.document.getBody().getText());
+						// console.log("Data");
+						// //console.log(CKEDITOR.instances.editor1.document.getBody().getText());
+						// console.log(CKEDITOR.instances.editor1.getBody().getText());
+						// console.log(CKEDITOR.instances.editor1.getData());
+						// console.log(CKEDITOR.instances.editor1.editable().getText());
+						// console.log(CKEDITOR.instances.editor2.document.getBody().getText());
 
 						var editorData = CKEDITOR.instances.editor2.getData();
 						console.log(editorData);
