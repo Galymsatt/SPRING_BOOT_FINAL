@@ -18,7 +18,7 @@ public class Cart extends BaseEntity{
     @JoinColumn(name = "cart_id")
     private List<CartItem> cartItems;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)//for what it needed, figure out -> if customer is null, it means that cart is a anonymouses cart
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)//for what it needed, figure out -> if customer is null, it means that cart is a anonymous cart
     @JoinColumn(name = "customerId")
     private Customer customer;
 

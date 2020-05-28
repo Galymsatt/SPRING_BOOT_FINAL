@@ -12,6 +12,8 @@ import com.project.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,17 +36,35 @@ public class CartServiceImpl implements CartService {
     private CartItemRepository cartItemRepository;
 
     @Override
-    public String addProduct(Long productId, int quantity) {
+    public String addProduct(Long productId, int quantity, HttpServletRequest request) {
 
         String response = "addToCart_success";
 
         Product product = productService.productById(productId);
 
-        Customer customer = customerService.getAuthonticatedCustomer();
+
         Cart cart = new Cart();
+        Customer customer = customerService.getAuthonticatedCustomer();
         if(customer!=null){
             if(customer.getCart()!=null){
                 cart = customer.getCart();
+            }
+        }
+        else {
+            Long cookieCartId;
+
+            Cookie[] cookies = request.getCookies();
+            if(cookies!=null){
+                for(Cookie c : cookies){
+                    if(c.getName().equals("cartId")){
+
+                        cookieCartId = Long.parseLong(c.getValue());
+
+                        cart = getCartById(cookieCartId);
+
+                        break;
+                    }
+                }
             }
         }
 
@@ -92,5 +112,21 @@ public class CartServiceImpl implements CartService {
         }//but we have to save cart of the anonymous user on session. Need to fix above else statement
 
         return response+cartId;
+    }
+
+    @Override
+    public Cart getCustomerCart(Long customerId) {
+
+        Cart cart = cartRepository.findByCustomer_Id(customerId);
+
+        return cart;
+    }
+
+    @Override
+    public Cart getCartById(Long cartId) {
+
+        Cart cart = cartRepository.findById(cartId).orElse(null);
+
+        return cart;
     }
 }
